@@ -2,66 +2,215 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rasch Mock Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mock Test Professional</title>
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathlive"></script>
+
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 15px; margin: 0; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .q-card { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .q-title { font-weight: bold; display: block; margin-bottom: 8px; color: #2c3e50; }
-        .options { display: flex; gap: 15px; }
-        input[type="text"] { width: 95%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .submit-btn { width: 100%; padding: 15px; background: #2481cc; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        :root {
+            --primary: #248bcf;
+            --success: #28a745;
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --text: #333;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        /* Savollar qatori dizayni */
+        .q-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 15px;
+        }
+
+        .q-num {
+            font-weight: bold;
+            min-width: 30px;
+            color: #666;
+        }
+
+        /* Variantlar tugmalari */
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .opt-btn {
+            min-width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .opt-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* MathLive input maydoni */
+        math-field {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fafafa;
+            outline: none;
+            font-size: 18px;
+        }
+
+        math-field:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(36, 139, 207, 0.2);
+        }
+
+        /* Yuborish tugmasi */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <h2 style="text-align: center;">Mock Test</h2>
-    <div id="questionsContainer"></div>
-    <button type="button" class="submit-btn" onclick="sendData()">Natijani ko'rish</button>
+    <h3>Mock Test Javoblarini belgilang</h3>
+    
+    <div id="test-form">
+        </div>
+
+    <button class="submit-btn" onclick="sendToBot()">Javoblarni yuborish</button>
+    <h7>Muammo bo'lsa, ekranni suratga olib admin yuboring</h7>
+<a href="https://t.me/Poooooo02" target="_blank">bu yerga bosing</a>.
+
+
+
 </div>
 
 <script>
     let tg = window.Telegram.WebApp;
     tg.expand();
-    tg.ready();
 
-    const container = document.getElementById('questionsContainer');
+    const form = document.getElementById('test-form');
 
-    for (let i = 1; i <= 55; i++) {
-        const div = document.createElement('div');
-        div.className = 'q-card';
-        if (i <= 36) {
-            div.innerHTML = `<span class="q-title">${i}-savol:</span>
-                <div class="options">
-                    <label><input type="radio" name="q${i}" value="A"> A</label>
-                    <label><input type="radio" name="q${i}" value="B"> B</label>
-                    <label><input type="radio" name="q${i}" value="C"> C</label>
-                    <label><input type="radio" name="q${i}" value="D"> D</label>
-                </div>`;
-        } else {
-            div.innerHTML = `<span class="q-title">${i}-savol (Yozma):</span>
-                a) <input type="text" id="q${i}a" placeholder="Javob a..."><br>
-                b) <input type="text" id="q${i}b" placeholder="Javob b...">`;
-        }
-        container.appendChild(div);
+    // 1-33 savollar (A-D)
+    for(let i=1; i<=33; i++) {
+        createMCQ(i, ['A', 'B', 'C', 'D']);
     }
 
-    function sendData() {
-        let answers = {};
-        for (let i = 1; i <= 55; i++) {
-            if (i <= 36) {
-                let r = document.querySelector(`input[name="q${i}"]:checked`);
-                answers[i] = r ? r.value : "";
+    // 34-36 savollar (A-F)
+    for(let i=34; i<=36; i++) {
+        createMCQ(i, ['A', 'B', 'C', 'D', 'E', 'F']);
+    }
+
+    // 37-55 savollar (MathLive Yozma)
+    for(let i=37; i<=55; i++) {
+        createMathInput(i);
+    }
+
+    function createMCQ(num, options) {
+        let div = document.createElement('div');
+        div.className = 'q-row';
+        
+        let html = `<span class="q-num">${num}.</span><div class="options-container" id="q${num}">`;
+        options.forEach(opt => {
+            html += `<button class="opt-btn" onclick="selectOpt(this, ${num})">${opt}</button>`;
+        });
+        html += `</div>`;
+        
+        div.innerHTML = html;
+        form.appendChild(div);
+    }
+
+    function selectOpt(btn, num) {
+        let parent = document.getElementById(`q${num}`);
+        Array.from(parent.children).forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function createMathInput(num) {
+        let div = document.createElement('div');
+        div.className = 'q-row';
+        div.style.flexDirection = 'column';
+        div.style.alignItems = 'flex-start';
+        
+        div.innerHTML = `
+            <span class="q-num">${num}. Yozma javob:</span>
+            <math-field id="q${num}" virtual-keyboard-mode="onfocus" placeholder="Formulani kiriting..."></math-field>
+        `;
+        form.appendChild(div);
+    }
+
+    function sendToBot() {
+        let results = {};
+        for(let i=1; i<=55; i++) {
+            let el = document.getElementById(`q${i}`);
+            if(i <= 36) {
+                let active = el.querySelector('.active');
+                results[i] = active ? active.innerText : "";
             } else {
-                let a = document.getElementById(`q${i}a`).value.trim();
-                let b = document.getElementById(`q${i}b`).value.trim();
-                answers[i] = a + "|" + b;
+                // MathLive qiymatini LaTeX formatida olish
+                results[i] = el.value; 
             }
         }
-        tg.sendData(JSON.stringify(answers));
+        
+        // Telegramga jo'natish
+        tg.sendData(JSON.stringify(results));
     }
 </script>
+
 </body>
 </html>
